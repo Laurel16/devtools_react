@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import moment from 'moment'
+import { config } from "./config";
 
 
 
@@ -23,7 +24,7 @@ function PostDetails(props) {
   useEffect(() => {
     axios({
       method: "GET",
-      url: `http://localhost:3001/posts/${id}`,
+      url: `${config.baseUrl}/posts/${id}`,
       headers: JSON.parse(localStorage.getItem('user'))
     }).then((response) => {
       setPost(response.data)
