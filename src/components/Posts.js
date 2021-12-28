@@ -21,7 +21,9 @@ class Posts extends React.Component {
      componentDidMount() {
     axios({
       method: 'GET',
-      url: `${config.baseUrl}`
+      url: `${config.baseUrl}`,
+      headers: {'X-Requested-With': 'XMLHttpRequest'}
+
     })
     .then(response => {
       this.setState({posts: response.data})
