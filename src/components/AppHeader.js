@@ -4,12 +4,13 @@ import axios from 'axios'
 import './Posts.css'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
+import { config } from "./config";
 
 const handleSignOut = function(e) {
   e.preventDefault();
   axios({
     method: 'DELETE',
-    url: 'http://localhost:3001/auth/sign_out',
+    url: `${config.baseUrl}/auth/sign_out`,
     data: JSON.parse(localStorage.user)
   })
   .then(() => {
