@@ -1,8 +1,12 @@
+
 import React from 'react'
 import axios from 'axios'
 import './Posts.css'
 import PostsList from './PostsList'
 import PostForm from './PostForm'
+import FormErrors from './FormErrors'
+import validations from './../validations'
+import PropTypes from 'prop-types'
 import Container from 'react-bootstrap/Container'
 import { config } from "./config";
 
@@ -14,8 +18,28 @@ class Posts extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      posts: []
+      posts: [],
+      title: {value: '', valid: false},
+      date:{value: '', valid: false},
+      lead:'',
+      content: {value: '', valid: false},
+      image: '',
+      formErrors: '',
+      formValid: false
     }
+  }
+
+    static formValidations = {
+    title: [
+      (value) => { return(validations.checkMinLength(value, 3)) }
+    ],
+    date: [
+      (value) => { return(validations.checkMinLength(value, 1)) },
+      (value) => { return(validations.timeShouldBeInTheFuture(value)) }
+    ],
+    content: [
+      (value) => { return(validations.checkMinLength(value, 1)) }
+    ]
   }
 
      componentDidMount() {
@@ -30,26 +54,55 @@ class Posts extends React.Component {
     })
   }
 
+    validateField(fieldName, fieldValue, fieldValidations) {
+    let fieldValid = true
+    let errors = fieldValidations.reduce((errors, validation) => {
+      let [valid, fieldError] = validation(fieldValue)
+      if(!valid) {
+        errors = errors.concat([fieldError])
+      }
+      return(errors);
+    }, []);
 
-   handleInput = e => {
+    fieldValid = errors.length === 0
+
+    const newState = {formErrors: {...this.state.formErrors, [fieldName]: errors}}
+    newState[fieldName] = {...this.state[fieldName], valid: fieldValid}
+    this.setState(newState, this.validateForm)
+  }
+
+
+validateForm() {
+    this.setState({formValid: this.state.title.valid && this.state.content.valid && this.state.date.valid})
+  }
+
+
+   resetFormErrors () {
+    this.setState({formErrors: {}})
+  }
+
+
+    handleInput = e => {
     e.preventDefault()
     const name = e.target.name
+    const value = e.target.value
     const newState = {}
-    newState[name] = e.target.value
-    this.setState(newState)
-
+    newState[name] = {...this.state[name], value: value}
+    this.setState(newState, () => this.validateField(name, value, Posts.formValidations[name]))
   }
+
+
 
   handleSubmit = e => {
     e.preventDefault()
     let newPost = {
-      title: this.state.title,
-      date: this.state.date,
+      title: this.state.title.value,
+      date: this.state.date.value,
       category: this.state.category,
-      content: this.state.content,
+      content: this.state.content.value,
       image: this.state.image,
       lead: this.state.lead,
-      hashtag: this.state.hashtag
+      image: this.state.image
 
     }
     axios({
@@ -60,9 +113,11 @@ class Posts extends React.Component {
     })
     .then(response => {
       this.addNewPost(response.data)
+      this.resetFormErrors()
     })
     .catch(error => {
-      console.log(error)
+      console.log(error.response.data)
+      this.setState({formErrors: error.response.data})
     })
   }
 
@@ -82,16 +137,17 @@ class Posts extends React.Component {
 
            {currentUser &&
              <div className="mb-5 event-form-homepage-container">
+             <FormErrors formErrors = {this.state.formErrors} />
             <PostForm
               handleSubmit = {this.handleSubmit}
               handleInput = {this.handleInput}
-              title= {this.state.title}
-              date= {this.state.date}
+              formValid={this.state.formValid}
+              title= {this.state.title.value}
+              date= {this.state.date.value}
               category= {this.state.category}
-              content= {this.state.content}
+              content= {this.state.content.value}
               image= {this.state.image}
               lead= {this.state.lead}
-              hashtag= {this.state.hashtag}
             />
             </div>
              }
@@ -100,8 +156,11 @@ class Posts extends React.Component {
 
        </Container>
         )
-
       }
+
+
+
+
     }
 
 

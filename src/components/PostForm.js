@@ -12,7 +12,7 @@ const PostForm = (props) => (
           <input type="text" name="image" placeholder="image" value={props.image} onChange={props.handleInput}/>
           <input type="text" name="lead" placeholder="Lead"  value={props.lead} onChange={props.handleInput}/>
           <input type="text" name="hashtag" placeholder="Hashtag" multiple="true" value={props.hashtag} onChange={props.handleInput} />
-          <button type="submit">Create Post</button>
+          <input type='submit' value='Make Post' disabled={!props.formValid} />
         </form>
       </div>
     )

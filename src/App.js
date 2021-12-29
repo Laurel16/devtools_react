@@ -9,6 +9,7 @@ import Posts from './components/Posts'
 import Login from './components/Login'
 import SignUp from './components/SignUp'
 import PostDetails from './components/PostDetails'
+import PostForm from './components/PostForm'
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/login" element= { currentUser ? <Navigate to="/" /> : <Login />}/>
         <Route path="/signup" element= { currentUser ? <Navigate to="/" /> : <SignUp />}/>
         <Route path="/posts/:id" element={<PostDetails /> }/>
+        <Route path="/posts/:id/edit" element= { currentUser ? <PostForm />: <Navigate to="/login" />}/>
       </Routes>
     </Router>
   )

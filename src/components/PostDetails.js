@@ -10,9 +10,6 @@ import moment from 'moment'
 import { config } from "./config";
 
 
-
-
-
 const formatDate = datetime =>
   new Date(datetime).toDateString()
 
@@ -51,6 +48,9 @@ function PostDetails(props) {
                 <p className="text-uppercase post-date-abbreviated">{moment(post.date).format('MMM')}</p>
                 <p className="post-date-abbreviated">{moment(post.date).format('DD')}</p>
                 <h1 className="pt-4 h5">{post.title}</h1>
+                {post.user &&
+                  <div className="pb-3 text-muted">by {post.user.uid}</div>
+                }
                 <div className="post-price">
                   <div className="text-muted">
                     Free
