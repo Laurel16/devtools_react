@@ -29,7 +29,7 @@ class Posts extends React.Component {
     }
   }
 
-    static formValidations = {
+  static formValidations = {
     title: [
       (value) => { return(validations.checkMinLength(value, 3)) }
     ],
@@ -42,47 +42,19 @@ class Posts extends React.Component {
     ]
   }
 
-     componentDidMount() {
+  componentDidMount() {
     axios({
       method: 'GET',
-      url: `${config.baseUrl}`,
-      headers: {'X-Requested-With': 'XMLHttpRequest'}
-
+      url: `${config.baseUrl}`
     })
     .then(response => {
       this.setState({posts: response.data})
     })
   }
 
-    validateField(fieldName, fieldValue, fieldValidations) {
-    let fieldValid = true
-    let errors = fieldValidations.reduce((errors, validation) => {
-      let [valid, fieldError] = validation(fieldValue)
-      if(!valid) {
-        errors = errors.concat([fieldError])
-      }
-      return(errors);
-    }, []);
-
-    fieldValid = errors.length === 0
-
-    const newState = {formErrors: {...this.state.formErrors, [fieldName]: errors}}
-    newState[fieldName] = {...this.state[fieldName], valid: fieldValid}
-    this.setState(newState, this.validateForm)
-  }
 
 
-validateForm() {
-    this.setState({formValid: this.state.title.valid && this.state.content.valid && this.state.date.valid})
-  }
-
-
-   resetFormErrors () {
-    this.setState({formErrors: {}})
-  }
-
-
-    handleInput = e => {
+  handleInput = e => {
     e.preventDefault()
     const name = e.target.name
     const value = e.target.value
@@ -120,6 +92,34 @@ validateForm() {
       this.setState({formErrors: error.response.data})
     })
   }
+
+ validateField(fieldName, fieldValue, fieldValidations) {
+    let fieldValid = true
+    let errors = fieldValidations.reduce((errors, validation) => {
+      let [valid, fieldError] = validation(fieldValue)
+      if(!valid) {
+        errors = errors.concat([fieldError])
+      }
+      return(errors);
+    }, []);
+
+    fieldValid = errors.length === 0
+
+    const newState = {formErrors: {...this.state.formErrors, [fieldName]: errors}}
+    newState[fieldName] = {...this.state[fieldName], valid: fieldValid}
+    this.setState(newState, this.validateForm)
+  }
+
+
+validateForm() {
+    this.setState({formValid: this.state.title.valid && this.state.content.valid && this.state.date.valid})
+  }
+
+
+   resetFormErrors () {
+    this.setState({formErrors: {}})
+  }
+
 
 
     addNewPost= (post) => {
