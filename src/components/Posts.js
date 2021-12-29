@@ -39,7 +39,10 @@ class Posts extends React.Component {
     ],
     content: [
       (value) => { return(validations.checkMinLength(value, 1)) }
-    ]
+    ],
+    image: [],
+    lead: [],
+    category: []
   }
 
   componentDidMount() {
