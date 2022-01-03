@@ -170,7 +170,7 @@ deleteEvent = () => {
       <Container className="container-max-width pt-5 my-5">
 
         <h4>{this.state.editing ? "Edit Post" : "Create a new Post"}</h4>
-
+         <FormErrors formErrors = {this.state.formErrors} />
         <form onSubmit={this.handleSubmit}>
           <input type="text" name="title" placeholder="Title"  value={this.state.title.value} onChange={this.handleInput}/>
           <input type="text" name="date" placeholder="Date"  value={this.state.date.value} onChange={this.handleInput}/>
