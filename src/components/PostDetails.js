@@ -1,6 +1,5 @@
 import {React, useState, useEffect } from 'react'
 import axios from 'axios'
-import { Link } from 'react-router-dom'
 import {useParams} from "react-router-dom"
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -14,7 +13,7 @@ const formatDate = datetime =>
   new Date(datetime).toDateString()
 
 function PostDetails(props) {
-   const {id} = useParams()
+  const {id} = useParams()
 
   const [post, setPost] = useState({})
 
